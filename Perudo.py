@@ -15,6 +15,7 @@ class Player:
         return self.hand
     
     def make_a_guess(self, amount_of_dices, number):
+        self.guess = {}
         self.guess[amount_of_dices] = number
         return self.guess
     
@@ -33,12 +34,6 @@ class Player:
         self.hand = [random.randint(1, 6) for number in range(self.number_of_dices)]
         self.guess = {}
 
-
-
-        
-
-
-    
 
     
     
@@ -62,9 +57,25 @@ while player1.number_of_dices > 0 and player2.number_of_dices > 0:
 
     if player1_action == 's':
         print(player1.look_at_hand())
-        player1_guess_amount = input('Time to make a guess! Start with the amount of dices: ')
-        player1_guess_number = input('Of what number: ')
-        print(player1.make_a_guess(player1_guess_amount, player1_guess_number))
+        player1_choice = input('Do you want to make a guess or call bullshit? For guess press g, for bullshit press b: ')
+        if player1_choice == 'g':
+            player1_guess_amount = input('Time to make a guess! Start with the amount of dices: ')
+            player1_guess_number = input('Of what number: ')
+            print(player1.make_a_guess(player1_guess_amount, player1_guess_number))
+        elif player1_choice == 'b':
+            total = player1.hand + player2.hand
+            
+            if int(list(player1.guess.keys())[0]) <= total.count(int(player1.guess[player1_guess_amount])):
+                player1.lose_a_dice()
+                print('You\'re wrong, you lost a die')
+                player2.reset()
+                player1.reset() 
+            else:
+                player2.lose_a_dice()
+                print('You\'re right! {name} lost a dice'.format(name = player1.name))
+                player2.reset()
+                player1.reset() 
+
 
 
     player2_action = input('{name} it\'s your turn! Press s then enter to see your dices '.format(name = player2.name))
